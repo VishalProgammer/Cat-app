@@ -1,14 +1,17 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-const apiKey = process.env.REACT_APP_API_KEY;
+import React from 'react';
+import Home from './Pages/homePage';
+
 
 
 function App() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showHome, setShowHome] = useState(true);
+  const [showBreedWiki, setShowBreedWiki] = useState(false);
+  const apiKey = process.env.REACT_APP_CAT_API;
   
   useEffect(() => {
     const fetchData = async () => {
@@ -31,9 +34,14 @@ function App() {
 
   return (
     <>
+      {showHome?
+      (<Home/>):(null)
+      }
+      {showBreedWiki
 
+      }
     </>
   )
 }
 
-export default App
+export default App;
