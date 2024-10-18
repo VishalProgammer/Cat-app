@@ -1,0 +1,15 @@
+#body{
+    margin: 0 auto;
+    align-items: center;
+    text-align: center;
+}
+
+#logo{
+    width: 20%;
+    height: 20%;
+}
+
+#heading{
+    font-size: 60px;
+}
+
