@@ -4,7 +4,7 @@ import React from 'react';
 import Home from './Pages/homePage';
 import { useEffect } from 'react';
 import BreedWiki from './Pages/breedWiki';
-
+import Gallery from './Pages/gallery';
 
 
 function App() {
@@ -32,12 +32,11 @@ function App() {
         setLoading(false);
       }
     };
-    if(data){
-    console.log('data: ',data);
-    }
-  
+    
     fetchData();
   }, []);
+
+  
 
   const onHomeClick = (event) => {
     setShowBreedWiki(false)
@@ -46,9 +45,12 @@ function App() {
   }
   
   const onBreedWikiClick = (event) => {
+    fetch(`https://api.thecatapi.com/v1/breeds?api_key=${apiKey}`).then(response=>setData(response.data))
     setShowBreedWiki(true)
     setShowHome(false)
     setShowGallery(false)
+    console.log(data);
+    
   }
   
   const onGalleryClick = (event) => {
@@ -71,6 +73,10 @@ function App() {
 
       {showBreedWiki?
       (<BreedWiki/>):(null)
+      }
+
+      {showGallery?
+      (<Gallery/>):null
       }
     </>
   )
