@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import React from 'react';
 import Home from './Pages/homePage';
+import { useEffect } from 'react';
 
 
 
@@ -11,7 +12,8 @@ function App() {
   const [error, setError] = useState(null);
   const [showHome, setShowHome] = useState(true);
   const [showBreedWiki, setShowBreedWiki] = useState(false);
-  const apiKey = process.env.REACT_APP_CAT_API;
+  const apiKey = import.meta.env.CAT_API_KEY;
+  
   
   useEffect(() => {
     const fetchData = async () => {
