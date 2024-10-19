@@ -3,8 +3,9 @@ import './App.css'
 import React from 'react';
 import Home from './Pages/homePage';
 import { useEffect } from 'react';
-import BreedWiki from './Pages/breedWiki';
+import {BreedWiki,BreedList, BreedWikiResult} from './Pages/breedWiki';
 import Gallery from './Pages/gallery';
+import axios from 'axios';
 
 
 function App() {
@@ -13,27 +14,48 @@ function App() {
   const [error, setError] = useState(null);
   const [showHome, setShowHome] = useState(true);
   const [showBreedWiki, setShowBreedWiki] = useState(false);
-  const [showGallery, setShowGallery] = useState(false)
+  const [breedSearchText, setBreedSearchText] = useState('');
+  const [breedNames, setBreedNames] = useState('');
+  const [breedresultObj, setBreedresultObj] = useState([]);
+  const [breedSearchError, setbreedSearchError] = useState('')
+  const [filteredId, setFilteredId] = useState([]);
+  const [gallerySearchText, setgallerySearchText] = useState('');
+  const [showGallery, setShowGallery] = useState(false);
+  const [showBreedList, setshowBreedList] = useState(true);
+  const [showBreedResult, setshowBreedResult] = useState(false);
   const apiKey = import.meta.env.CAT_API_KEY;
-  
-  
+  const URL = `https://api.thecatapi.com/v1/breeds?api_key=${apiKey}`
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`https://api.thecatapi.com/v1/breeds?api_key=${apiKey}`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        setData(data);
-        setLoading(false);
-      } catch (error) {
-        setError(error);
-        setLoading(false);
-      }
-    };
+    if (breedSearchText && data.length > 0) {
+      const filtered = data.filter(breed => 
+        breed.name.toLowerCase().includes(breedSearchText.toLowerCase()))
+        .map(breed => breed.id);
+
+      setFilteredId(filtered);
+    }
     
-    fetchData();
+    else {
+      setFilteredId([]);
+
+    
+    
+    }
+    
+  }, [breedSearchText, data])
+
+
+  useEffect(() => {
+    axios.
+    get(URL).
+    then((response)=>{
+      setData(response.data)
+      setBreedNames(response.data.name)
+    }).
+    catch(console.log('Error 404'))
+    
+    
+   
   }, []);
 
   
@@ -45,13 +67,30 @@ function App() {
   }
   
   const onBreedWikiClick = (event) => {
-    fetch(`https://api.thecatapi.com/v1/breeds?api_key=${apiKey}`).then(response=>setData(response.data))
+    axios.get(URL).then(response=>setData(response.data))
     setShowBreedWiki(true)
     setShowHome(false)
     setShowGallery(false)
-    console.log(data);
+    console.log('all data:', data);
+    setBreedNames(data.map(a=>a.name));
+    console.log(breedNames);
     
+
   }
+  const breedWikiSearchValue = (p) => {
+    setBreedSearchText(p.target.value)};
+  
+  const onBreedWikiSearch =  (event) =>{
+    event.preventDefault();
+    setBreedNames(data.map(a=>a.name));
+    setshowBreedList(false);
+    setshowBreedResult(true);
+
+    setBreedresultObj(data.find(a =>  a.name == breedSearchText))
+    breedresultObj? setBreedresultObj(breedresultObj):setbreedSearchError("Wrong Breed Name ;<")
+  }
+  
+  
   
   const onGalleryClick = (event) => {
     setShowBreedWiki(false)
@@ -59,26 +98,68 @@ function App() {
     setShowGallery(true)
   }
   
+  
+
+  const breedURL = () =>{
+    return breedNames.map((name)=><span id='breedNames'><a href={
+      data.find((item) => item.name === name).vetstreet_url || 
+      data.find((item) => item.name === name).wikipedia_url}>{name}</a></span>)
+  }
+
+ 
+
+
 
   return (
-    <>
-    <nav><ul id='titleBar'>
-      <li onClick={onHomeClick}>Home</li>
-      <li onClick={onBreedWikiClick}>BreedWiki</li>
-      <li onClick={onGalleryClick}>Gallery</li>
-      </ul></nav>
+    <div id='body'>
+    <nav id='titleBar'>
+      <p id='tab' onClick={onHomeClick}>Home</p>
+      <p id='tab' onClick={onBreedWikiClick}>BreedWiki</p>
+      <p id='tab' onClick={onGalleryClick}>Gallery</p>
+    </nav>
+
+
       {showHome?
       (<Home/>):(null)
       }
 
+
+     
       {showBreedWiki?
-      (<BreedWiki/>):(null)
-      }
+      (<BreedWiki 
+        searchText={breedWikiSearchValue} 
+        onClick={onBreedWikiSearch}
+        inputValue={breedSearchText}/>)
+        :null}
+
+        {filteredId && data?
+
+        (filteredId.slice(0,5).
+        map(id => (<>
+          <p id='resultRef' key={id}>
+            {data.find(breed => breed.id === id)?.name}
+          </p>
+          <button 
+          onClick={() => onClickInfoBtn(id)}
+          id='resultBtn'>
+          {data.find(country => country.id === id)?.id}
+        </button>
+        <br /><br /></>))):
+        null}
+        
+      {showBreedWiki && showBreedList?
+      (<BreedList 
+        data={breedURL()}/>)
+        :null}
+{        console.log("Checking search:-",  filteredId)}        
+     
+      
+
 
       {showGallery?
       (<Gallery/>):null
       }
-    </>
+    </div>
   )
 }
 

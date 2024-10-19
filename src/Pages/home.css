@@ -1,17 +1,8 @@
-#body{
-    margin: 0 auto;
-    padding: 20px;
-    padding-top: 40px;
-    align-items: center;
-    text-align: center;
-    background-color: rgb(59, 59, 59);
-    width: 60%;
-    height: 80%;
-}
+
 
 #logo{
-    width: 30%;
-    height: 30%;
+    width: 40%;
+    height: 40%;
 }
 
 #heading{
