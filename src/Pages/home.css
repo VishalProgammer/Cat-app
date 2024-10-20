@@ -1,6 +1,10 @@
-
+#Homebody{
+    align-items: center;
+    text-align: center;
+}
 
 #logo{
+    margin-top: 0;
     width: 40%;
     height: 40%;
 }
