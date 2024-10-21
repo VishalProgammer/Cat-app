@@ -50,6 +50,7 @@
 }
 
 #imgFindBtn:hover{
+    cursor: pointer;
     background-color: greenyellow;
     color: black;
 }
