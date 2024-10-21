@@ -4,7 +4,7 @@ import React from 'react';
 import Home from './Pages/homePage';
 import { useEffect } from 'react';
 import {BreedWiki,BreedList, BreedInfo} from './Pages/breedWiki';
-import Gallery from './Pages/gallery';
+import {Gallery,GalleryAlbum, GalleryResult} from './Pages/gallery';
 import axios from 'axios';
 
 
@@ -20,12 +20,19 @@ function App() {
   const [breedInfoImg, setBreedInfoImg] = useState([])
   const [catImages, setCatImages] = useState([])
   const [showGallery, setShowGallery] = useState(false);
+  const [galleryIds, setgalleryIds] = useState([])
   const [gallerySearchText, setgallerySearchText] = useState('');
+  const [galleryImgs, setgalleryImgs] = useState([]);
+  const [refresh, setrefresh] = useState([])
+  const [showAlbum, setshowAlbum] = useState(false);
+  const [album, setalbum] = useState([])
+  const [showGalleryResult, setshowGalleryResult] = useState(false)
   const [showBreedList, setshowBreedList] = useState(true);
   const [showBreedResult, setshowBreedResult] = useState(true);
   const [showBreedInfo, setshowBreedInfo] = useState(false);
   const apiKey = import.meta.env.CAT_API_KEY;
   const URL = `https://api.thecatapi.com/v1/breeds?api_key=${apiKey}`
+
 
   useEffect(() => {
     axios.
@@ -33,11 +40,13 @@ function App() {
     then((response)=>{
       setData(response.data)
       setBreedNames(response.data.name)
-      console.log('info:-',response);
+      setgalleryIds(response.data.reference_image_id)
+      console.log('info:-',response.data);
       
     }).
     catch(console.log('Error 404'))
   }, []);
+
 
   useEffect(() => {
     if (breedSearchText && data.length > 0) {
@@ -52,19 +61,17 @@ function App() {
       setFilteredId([]);
     }
   }, [breedSearchText, data])
-
-
-
-
   
 
   const onHomeClick = (event) => {
-    setShowBreedWiki(false)
-    setShowHome(true)
-    setShowGallery(false)
-    setshowBreedInfo(false)
-    setshowBreedList(false)
-    setshowBreedResult(false)
+    setShowBreedWiki(false);
+    setShowHome(true);
+    setShowGallery(false);
+    setshowBreedInfo(false);
+    setshowBreedList(false);
+    setshowBreedResult(false);
+    setshowGalleryResult(false);
+    setshowAlbum(false);
   }
   
   const onBreedWikiClick = (event) => {
@@ -75,13 +82,10 @@ function App() {
     setshowBreedInfo(false);
     setshowBreedList(true);
     setshowBreedResult(true);
+    setshowGalleryResult(false);
+    setshowAlbum(false);
     console.log('all data:', data);
     setBreedNames(data.map(a=>a.name));
-    console.log(breedNames);
-    console.log('images:', catImages);
-    
-    
-
   }
   const breedWikiSearchValue = (p) => {
     setBreedSearchText(p.target.value)};
@@ -92,20 +96,6 @@ function App() {
     setshowBreedList(false);
     setshowBreedResult(true);
   }
-  
-  
-  
-  const onGalleryClick = (event) => {
-    setShowBreedWiki(false)
-    setShowHome(false)
-    setShowGallery(true)
-    setshowBreedInfo(false)
-    setshowBreedList(false)
-    setshowBreedResult(false)
-    
-  }
-  
-  
 
   const breedURL = () =>{
     return breedNames.map((name)=><span id='breedNames'><a href={
@@ -134,6 +124,42 @@ function App() {
     console.log("Selected Breed img:", breedInfoImg);
 
   }, [seletedBreed])
+  
+  
+    
+  const onGalleryClick = (event) => {
+    setShowBreedWiki(false);
+    setShowHome(false);
+    setShowGallery(true);
+    setshowBreedInfo(false);
+    setshowBreedList(false);
+    setshowBreedResult(false);
+    setshowGalleryResult(false);
+    setshowAlbum(true);
+    
+  }
+  const gallerySearchValue = (p) => {
+    setgallerySearchText(p.target.value)};
+
+  const galleryFindBtn = (event) =>{
+    event.preventDefault();
+    setshowAlbum(false);
+    setshowGalleryResult(true);
+    axios.get(`https://api.thecatapi.com/v1/images/search?limit=10&breed_ids=${data.find(a => a.name.toLowerCase() == gallerySearchText.toLowerCase()).id}&api_key=${apiKey}`).
+    then((response)=>{
+      setgalleryImgs(response.data.map(a=>a.url));
+      console.log('All IMGS data:' ,response.data.map(a=>a.url));
+    })
+
+  }
+  useEffect(() => {
+    axios.get(`https://api.thecatapi.com/v1/images/search?limit=10`).
+    then((response)=>{
+      console.log('Random Images:', response.data);
+      setalbum(response.data.map(a => a.url));
+    })
+  
+  }, [showAlbum, refresh])
   
   
 
@@ -200,7 +226,22 @@ function App() {
 
 
       {showGallery?
-      (<Gallery/>):null
+      (<Gallery 
+        searchText={gallerySearchValue} 
+        value={gallerySearchText} 
+        findBtn={galleryFindBtn}
+        refresh={()=>{setrefresh(a => [...a, 'refresh'])
+        }}
+        />):null
+      }
+      {galleryImgs && showGalleryResult?
+      (<GalleryResult images={galleryImgs.map((url, index)=><img id='galleryImg' alt={index} src={url}></img>)}/>):
+      null}
+      {album && showAlbum || showAlbum=='refresh'?
+        (<GalleryAlbum 
+          images={album.map((url, index) => <img id='galleryImg' 
+            alt={index} src={url}></img>)} />):
+        null
       }
     </div>
   )

@@ -1,13 +1,18 @@
+#background{
+    background-color: rgb(73, 73, 73);
+}
+
 #body{
     margin: 0 auto;
+    color: azure;
     padding-bottom: 10px;
-    background-color: rgb(59, 59, 59);
+    background-color: rgb(148, 147, 147);
     width: 60%;
     height: 80%;
 }
 
 #titleBar{
-    background-color: rgba(0, 255, 255, 0.544);
+    background-color: rgba(3, 195, 195, 0.544);
     width: 100%;
     margin-top: 0;
     padding-top: 7px;

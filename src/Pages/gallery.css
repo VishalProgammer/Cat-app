@@ -1,3 +1,55 @@
+
 #searchText{
     width: 40%;
+
+}
+
+#galleryImg{
+    width: 100%;
+    height: 90%;
+    text-align: center;
+    align-items: center;
+}
+
+#header-gallery{
+    text-align: center;
+    align-items: center;
+}
+
+#album{
+   
+    display: grid;
+    grid-template-columns:auto auto;
+    text-align: center;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+#imgFindBtn{
+    width: 50px;
+    height: 25px;
+    background-color: gray;
+    color: wheat;
+    display: inline;
+}
+
+#refreshBtn{
+    width: 50px;
+    height: 50px;
+    position: fixed;
+    text-align: right;
+    float: right;
+    margin-left: 20px;
+    margin-top: 40px;
+    border-radius: 50%;
+}
+#refreshBtn:hover{
+    cursor: pointer;
+    background-color: yellow;
+}
+
+#imgFindBtn:hover{
+    background-color: greenyellow;
+    color: black;
 }
