@@ -63,6 +63,11 @@
         height: 40px;
         margin-left: 5px;
     }
-
-    
+}
+@media only screen and (max-width: 500px){
+    #refreshBtn{
+        width: 60px;
+        height: 60px;
+        margin-left: 5px;
+    }
 }

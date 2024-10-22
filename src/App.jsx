@@ -234,8 +234,7 @@ function App() {
         searchText={gallerySearchValue} 
         value={gallerySearchText} 
         findBtn={galleryFindBtn}
-        refresh={onRefresh}
-        />):null
+        refresh={onRefresh}/>):null
       }
       {galleryImgs && showGalleryResult?
       (<GalleryResult images={galleryImgs.map((url, index)=><img id='galleryImg' alt={index} src={url}></img>)}/>):
@@ -243,7 +242,8 @@ function App() {
       {album && showAlbum || showAlbum=='refresh'?
         (<GalleryAlbum 
           images={album.map((url, index) => <img id='galleryImg' 
-            alt={index} src={url}></img>)} />):
+            alt={index} src={url}></img>)} 
+            />):
         null
       }
     </div>
