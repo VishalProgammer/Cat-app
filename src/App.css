@@ -56,3 +56,10 @@
     }
     
 }
+
+@media only screen and (max-width: 500px){
+    #tab{
+        font-size: 0.6rem;
+    }
+    
+}
