@@ -54,3 +54,10 @@
     background-color: greenyellow;
     color: black;
 }
+
+@media only screen and (max-width: 768px){
+    #header-gallery{
+        font-size: 2rem;
+    }
+    
+}

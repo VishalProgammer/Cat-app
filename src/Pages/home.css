@@ -22,3 +22,12 @@
     margin-top: 5px;
 }
 
+@media only screen and (max-width: 768px){
+    #heading{
+        font-size: 3rem;
+    }
+    #quote{
+        font-size: 0.9rem;
+    }
+    
+}

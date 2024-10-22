@@ -19,7 +19,7 @@ const BreedList = (props)=>{
 const BreedWiki = (props)=>{
     return(
         <div id="BreedBody">
-            <h1 id="heading">BreedWiki</h1>
+            <h1 id="Breedheading">BreedWiki</h1>
 
             <form action="submit">
 
