@@ -161,7 +161,11 @@ function App() {
   
   }, [showAlbum, refresh])
   
-  
+  const onRefresh = ()=>{
+    setrefresh(a => [...a, 'refresh'])
+    setshowGalleryResult(false)
+    setshowAlbum(true)
+  }
 
   return (
     <div id='body'>
@@ -230,8 +234,7 @@ function App() {
         searchText={gallerySearchValue} 
         value={gallerySearchText} 
         findBtn={galleryFindBtn}
-        refresh={()=>{setrefresh(a => [...a, 'refresh'])
-        }}
+        refresh={onRefresh}
         />):null
       }
       {galleryImgs && showGalleryResult?
